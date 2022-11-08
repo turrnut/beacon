@@ -20,6 +20,6 @@ $(asm_obj): build/asm/%.o : src/asm/%.asm
 .PHONY: build
 build: $(cpp_obj) $(asm_obj) $(c_obj)
 	mkdir -p out && \
-	x86_64-elf-ld -n -o out/os.bin -T target/link.ld $(cpp_obj) $(asm_obj) $(c_obj) && \
+	ld -n -o out/os.bin -T target/link.ld $(cpp_obj) $(asm_obj) $(c_obj) && \
 	cp out/os.bin target/boot/os.bin && \
 	grub-mkrescue /usr/lib/grub/i386-pc -o out/os.iso target
