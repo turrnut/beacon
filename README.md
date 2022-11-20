@@ -1,5 +1,5 @@
 # Beacon
-Beacon is an free, open source 64-bit operating system
+Beacon is a free, open source 64-bit operating system
 ## Build
 First, download the source code. Then run the following in the command line on the **root folder** in a Unix shell: <br/>
 <code>make build</code><br/>
