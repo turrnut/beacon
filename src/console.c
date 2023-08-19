@@ -2,12 +2,13 @@
  * Author: turrnut
  * Copyrighted © turrnut under the Apache 2.0 license
  *
- * We hoped that you will use this piece of open source
- * software fairly. read the LICENSE for details for
- * more details about how you can use it, you have freedom
- * to distribute and use this file in your project. However,
- * you will have to state changes you made and include the
- * orginal author of this file.
+ * We hope that you will utilize this open-source software
+ * responsibly. Please read the LICENSE for comprehensive
+ * information on how you can employ it. You have the
+ * freedom to distribute and incorporate this file into your
+ * project. However, you must indicate any modifications
+ * you've made and provide credit to the original author of
+ * this file.
  *
  * console.c
  */
@@ -18,8 +19,7 @@
 const static size_t NUM_COLS = 80;
 const static size_t NUM_ROWS = 25;
 
-struct Char
-{
+struct Char {
 	uint8_t character;
 	uint8_t color;
 };
