@@ -17,8 +17,7 @@
 #ifndef global_descriptor_table_header
 #define global_descriptor_table_header
 
-#include <stdint.h>
-#include <stdlib.h>
+#include "stdtypes.h"
 
 typedef struct {
     uint16_t lower_limit;
