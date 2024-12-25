@@ -19,7 +19,7 @@
 
 void start() {
 	clear_screen();
-	set_color(WHITE_COLOR, BLACK_COLOR);
+	set_color(GREEN_COLOR, WHITE_COLOR);
 	println("Welcome to my operating system!");
 	GlobalDescriptorTable table;
 	initTable(&table);
