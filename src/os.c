@@ -7,21 +7,31 @@
 
 #include "console.h"
 #include "gdt.h"
-#include "interrupt.h"
+#include "interrupts.h"
 #include "stdtypes.h"
 
+#include "pic.h" // Include the new PIC header
+
 void start() {
-	clear_screen();
-	set_color(GREEN_COLOR, WHITE_COLOR);
-	println("Beacon Operating System");
-	println("Copyright (c) Turrnut");
+    clear_screen();
+    set_color(GREEN_COLOR, WHITE_COLOR);
+    println("Beacon Operating System");
+    println("Copyright (c) Turrnut");
 
-	GlobalDescriptorTable table;
-	initTable(&table);
+   println("Initializing GDT...");
+    GlobalDescriptorTable table;
+    initTable(&table);
+   println("Initializing IDT...");
+    IDTEntry idt[IDT_SIZE];
+    initIDT(idt);
 
-	// initInterruptManager(&table);
+   println("Remapping PIC...");
+    pic_remap(); // Remap PIC
 
-	// activate();
-	
-	while (1) {}
+   println("Enabling interrupts...");
+    __asm__ volatile ("sti"); // Enable interrupts globally
+
+    while (1) {
+        __asm__ volatile ("hlt");
+    }
 }
