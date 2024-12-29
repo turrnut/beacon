@@ -19,9 +19,9 @@ void start() {
 	GlobalDescriptorTable table;
 	initTable(&table);
 
-	initInterruptManager(&table);
+	// initInterruptManager(&table);
 
-	activate();
+	// activate();
 	
 	while (1) {}
 }
