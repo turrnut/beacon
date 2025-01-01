@@ -1,4 +1,10 @@
-// keyboard.h
+/**
+ * Copyright (c) Turrnut Open Source Organization
+ * Under the GPL v3 License
+ * See COPYING for information on how you can use this file
+ * 
+ * keyboard.h
+ */
 
 #ifndef KEYBOARD_H
 #define KEYBOARD_H

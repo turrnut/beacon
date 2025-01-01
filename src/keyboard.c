@@ -1,4 +1,10 @@
-// keyboard.c
+/**
+ * Copyright (c) Turrnut Open Source Organization
+ * Under the GPL v3 License
+ * See COPYING for information on how you can use this file
+ * 
+ * keyboard.c
+ */
 
 #include "keyboard.h"
 #include "os.h"

@@ -1,24 +1,14 @@
 /**
- * Author: turrnut
- * Copyrighted © turrnut under the Apache 2.0 license
- *
- * We hope that you will utilize this open-source software
- * responsibly. Please read the LICENSE for comprehensive
- * information on how you can employ it. You have the
- * freedom to distribute and incorporate this file into your
- * project. However, you must indicate any modifications
- * you've made and provide credit to the original author of
- * this file.
- *
- *
+ * Copyright (c) Turrnut Open Source Organization
+ * Under the GPL v3 License
+ * See COPYING for information on how you can use this file
+ * 
  * console.h
  */
 
 #pragma once
-#ifndef console_header
-#define console_header
-
-
+#ifndef CONSOLE_H
+#define CONSOLE_H
 
 #include <stdint.h>
 #include <stddef.h>

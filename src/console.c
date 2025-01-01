@@ -1,5 +1,11 @@
-#ifndef CONSOLE_C
-#define CONSOLE_C
+/**
+ * Copyright (c) Turrnut Open Source Organization
+ * Under the GPL v3 License
+ * See COPYING for information on how you can use this file
+ * 
+ * console.c
+ */
+
 #include "console.h"
 
 const static size_t NUM_COLS = 80;
@@ -113,6 +119,3 @@ void move_cursor_left()
         buffer[col + NUM_COLS * row].character = ' ';  // Clear the character in that position
     }
 }
-
-
-#endif

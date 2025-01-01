@@ -1,3 +1,10 @@
+# Copyright (c) Turrnut Open Source Organization
+# Under the GPL v3 License
+# See COPYING for information on how you can use this file
+#
+# keyboard.asm
+#
+
 .section .data
 scancode_to_char:
     .byte 0, 0, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 0, 0
