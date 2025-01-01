@@ -1,10 +1,4 @@
-/**
- * Copyright (c) Turrnut Open Source Organization
- * Under the GPL v3 License
- * See COPYING for information on how you can use this file
- * 
- * keyboard.c
- */
+// keyboard.c
 
 #include "keyboard.h"
 #include "os.h"
@@ -40,7 +34,7 @@ int buffer_get(uint8_t* scancode) {
 // Scancode to ASCII conversion
 char scancode_to_ascii(uint8_t scancode) {
     static const uint8_t scancode_map[128] = {
-        0,  0, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 0,
+        0,  0, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\b',
         0, 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\n', 0,
         'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', '`', 0, '\\',
         'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 0, '*', 0, ' ', 0,
@@ -64,19 +58,40 @@ void handle_keypress(uint8_t scancode) {
         return; // Skip invalid keys
     }
 
-    if (ascii == '\b') { // Handle backspace
-        if (input_len > 0) {
-            input_len--;
-            if (curs_col == 0) { // Wrap back to the previous line
-                curs_col = NUM_COLS - 1;
-                curs_row--;
-            } else {
-                curs_col--;
+        if (ascii == '\b') { // handle backspace
+            if (input_len > 0) { // do nothing if there's no input
+                input_len--; // shrink the buffer
+                input_buffer[input_len] = '\0'; // null-terminate the buffer
+
+                // move the cursor back
+                if (curs_col == 0) { // we're at the start of a line
+                    if (curs_row > 0) { // not at the top of the screen
+                        curs_row--;
+                        curs_col = NUM_COLS - 1;
+                    }
+                } else {
+                    curs_col--;
+                }
+
+                // visually clear the character on screen
+                vga_buffer[curs_row * NUM_COLS + curs_col] = (struct Char){' ', default_color};
+
+                // redraw everything after the cursor (fix for already binted text)
+                for (size_t i = input_len; i < INPUT_BUFFER_SIZE; i++) {
+                    if (input_buffer[i] == '\0') {
+                        break;
+                    }
+                    vga_buffer[(curs_row * NUM_COLS) + curs_col] = (struct Char){' ', default_color};
+                    curs_col++;
+                    if (curs_col >= NUM_COLS) {
+                        curs_col = 0;
+                        curs_row++;
+                    }
+                }
+
+                update_cursor(); // update position
             }
-            vga_buffer[curs_row * NUM_COLS + curs_col] = (struct Char){' ', default_color};
-            update_cursor();
-        }
-    } else if (ascii == '\n') { // Handle newline
+        } else if (ascii == '\n') { // Handle newline
         input_buffer[input_len] = '\0';
         println(""); // Move to a new line
         process_command(input_buffer);
