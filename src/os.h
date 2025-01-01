@@ -20,5 +20,7 @@ void move_cursor_back();
 void delay_ms(int milliseconds);
 char* strncpy(char* dest, const char* src, size_t n);
 size_t strlen(const char* str);
+void reboot();
+
 
 #endif // OS_H

@@ -37,6 +37,13 @@ void delay_ms(int milliseconds) {
     }
 }
 
+void reboot() {
+    asm volatile ("cli"); // Disable interrupts
+    while (inb(0x64) & 0x02); // Wait until the keyboard controller is ready
+    outb(0x64, 0xFE); // Send the reset command to the keyboard controller
+    asm volatile ("hlt"); // Halt the CPU if reboot fails
+}
+
 
 // Output byte to port
 void outb(uint16_t port, uint8_t value) {
@@ -104,6 +111,10 @@ void process_command(const char* command) {
         curs_row = 0;
         move_cursor_back();
         update_cursor();
+    } else if (my_strcmp(command, "reboot") == 0) {
+        println("rebooting the system...");
+        delay_ms(1000); // Add a short delay for the message to be seen
+        reboot();
     } else if (my_strcmp(command, "") == 0) {
         move_cursor_back();
         update_cursor();
@@ -120,6 +131,7 @@ void process_command(const char* command) {
         update_cursor();
     }
 }
+
 
 // Move cursor to the beginning of the current line
 void move_cursor_back() {

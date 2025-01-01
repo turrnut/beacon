@@ -22,6 +22,7 @@ size_t input_len = 0;
 volatile uint8_t key_buffer[KEY_BUFFER_SIZE];
 volatile size_t buffer_head = 0;
 volatile size_t buffer_tail = 0;
+volatile uint8_t key_states[128] = {0}; // tracks if a key is currently pressed
 
 // Command history
 #define COMMAND_HISTORY_SIZE 5
@@ -69,16 +70,18 @@ char scancode_to_ascii(uint8_t scancode) {
 }
 
 void handle_keypress(uint8_t scancode) {
-    delay_ms(120); // Enforce delay between keypresses
-
-    if (scancode & 0x80) {
-        return; // Ignore key releases
+    if (scancode & 0x80) { // key release
+        key_states[scancode & 0x7F] = 0; // mark as released
+        return;
     }
+
+    if (key_states[scancode]) {
+        return; // ignore if key is already pressed
+    }
+    key_states[scancode] = 1; // mark as pressed
 
     char ascii = scancode_to_ascii(scancode);
-    if (!ascii) {
-        return; // Skip invalid keys
-    }
+    if (!ascii) return; // ignore invalid scancodes
 
     if (ascii == '\b') { // Handle backspace
         if (input_len > 0) {
