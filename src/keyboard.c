@@ -30,6 +30,12 @@ extern char command_history[COMMAND_HISTORY_SIZE][INPUT_BUFFER_SIZE];
 extern int command_history_index;
 extern int current_history_index;
 
+// Import replacement functions
+extern char* strncpy(char* dest, const char* src, size_t n);
+extern size_t strlen(const char* str);
+extern int strcmp(const char* s1, const char* s2);
+extern char* strchr(const char* str, char c);
+
 // Add a scancode to the buffer
 void buffer_add(uint8_t scancode) {
     size_t next_head = (buffer_head + 1) % KEY_BUFFER_SIZE;
