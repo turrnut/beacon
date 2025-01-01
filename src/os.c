@@ -9,7 +9,7 @@
 #include "os.h"
 #include "screen.h"
 #include "keyboard.h"
-#include "console.h"    // Assumes you have a console module
+#include "console.h"
 #include "stdtypes.h"
 
 // External variables from screen.c
@@ -24,17 +24,44 @@ extern size_t input_len;
 extern size_t curs_row;
 extern size_t curs_col;
 
-// Function to add delay (static, used only in os.c)
-static void delay_ms(int milliseconds) {
+// Command buffer for history
+#define COMMAND_HISTORY_SIZE 5
+char command_history[COMMAND_HISTORY_SIZE][INPUT_BUFFER_SIZE];
+int command_history_index = 0;     // Index to store the next command
+int current_history_index = -1;    // Index for navigating history
+
+void delay_ms(int milliseconds) {
     volatile int i = 0;
-    while (i < milliseconds * 1000) {
+    while (i < milliseconds * 1000) { // Test with a larger multiplier
         i++;
     }
 }
 
+
 // Output byte to port
 void outb(uint16_t port, uint8_t value) {
     asm volatile("outb %0, %1" : : "a"(value), "Nd"(port));
+}
+
+// strcpy replacement
+char* strncpy(char* dest, const char* src, size_t n) {
+    size_t i;
+    for (i = 0; i < n && src[i] != '\0'; i++) {
+        dest[i] = src[i];
+    }
+    for (; i < n; i++) { // Fill the rest with null bytes if needed
+        dest[i] = '\0';
+    }
+    return dest;
+}
+
+// strlen replacement
+size_t strlen(const char* str) {
+    size_t len = 0;
+    while (str[len] != '\0') {
+        len++;
+    }
+    return len;
 }
 
 // Input byte from port
@@ -55,30 +82,33 @@ static int my_strcmp(const char* s1, const char* s2) {
 
 // Process user commands
 void process_command(const char* command) {
+    if (command[0] != '\0') {
+        // Save command to history
+        strncpy(command_history[command_history_index], command, INPUT_BUFFER_SIZE);
+        command_history_index = (command_history_index + 1) % COMMAND_HISTORY_SIZE;
+        current_history_index = -1; // Reset history navigation
+    }
+
     if (my_strcmp(command, "test") == 0) {
         println("this is a test command.");
-        // Move the cursor down after the message
         curs_row++;
         if (curs_row >= NUM_ROWS) {
             scroll_screen();
             curs_row = NUM_ROWS - 1;
         }
         update_cursor();
-    } else if(my_strcmp(command, "clear") == 0){
+    } else if (my_strcmp(command, "clear") == 0) {
         clear_screen();
         row = 0;
         println("");
         curs_row = 0;
         move_cursor_back();
         update_cursor();
-    } else if(my_strcmp(command, "") == 0) {
+    } else if (my_strcmp(command, "") == 0) {
         move_cursor_back();
         update_cursor();
     } else {
-        // Move the cursor back to the beginning of the line
         move_cursor_back();
-
-        // Print the unknown command message on the same line
         print("\"");
         print(command);
         println("\" is not a known command or executable program.");
@@ -114,12 +144,9 @@ void start() {
 
     while (1) {
         uint8_t scancode;
-        // Poll for keyboard input manually
         scancode = inb(0x60);  // Read scancode from the keyboard port
         if (scancode) {
             handle_keypress(scancode);  // Call the handler directly
         }
-
-        delay_ms(150); // Add delay to prevent excessive keypress spamming
     }
 }
