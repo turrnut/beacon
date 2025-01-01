@@ -71,6 +71,9 @@ void process_command(const char* command) {
         curs_row = 0;
         move_cursor_back();
         update_cursor();
+    } else if(my_strcmp(command, "") == 0) {
+        move_cursor_back();
+        update_cursor();
     } else {
         // Move the cursor back to the beginning of the line
         move_cursor_back();
