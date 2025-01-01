@@ -12,10 +12,6 @@
 #include "console.h"    // Assumes you have a console module
 #include "stdtypes.h"
 
-// VGA color definitions
-#define GREEN_COLOR 0x0A
-#define WHITE_COLOR 0x0F
-
 // External variables from screen.c
 extern volatile struct Char* vga_buffer;
 extern uint8_t default_color;
@@ -96,10 +92,11 @@ void start() {
 
     enable_cursor(0, 15); // Enable the cursor
 
-    println("Welcome to Beacon! Copyright 2025 Turrnut.");
+    println("Welcome to Beacon Operating System!");
+    println("Copyright (c) 2025 Turrnut Open Source Organization.");
     println("Type a command:");
 
-    curs_row = 2;
+    curs_row = 3;
     curs_col = 0;
     update_cursor();
 
