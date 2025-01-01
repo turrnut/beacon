@@ -86,14 +86,30 @@ void handle_keypress(uint8_t scancode) {
     if (ascii == '\b') { // Handle backspace
         if (input_len > 0) {
             input_len--;
-            input_buffer[input_len] = '\0';
+
+            // Handle cursor position (across rows or within the same row)
             if (curs_col == 0 && curs_row > 0) {
+                // Move to the end of the previous row
                 curs_row--;
                 curs_col = NUM_COLS - 1;
             } else {
+                // Move cursor back within the same row
                 curs_col--;
             }
-            vga_buffer[curs_row * NUM_COLS + curs_col] = (struct Char){' ', default_color};
+            // Shift the input buffer left to fill the gap
+            for (size_t i = curs_col; i < input_len; i++) {
+                input_buffer[i] = input_buffer[i + 1];
+            }
+            input_buffer[input_len] = '\0'; // Null-terminate the buffer
+            // Update the screen buffer
+            size_t screen_index = curs_row * NUM_COLS + curs_col;
+            for (size_t i = screen_index; i < (NUM_ROWS * NUM_COLS) - 1; i++) {
+                vga_buffer[i] = vga_buffer[i + 1]; // Shift characters left on screen
+            }
+            // Clear the last character in the last row
+            vga_buffer[NUM_ROWS * NUM_COLS - 1] = (struct Char){' ', default_color};
+
+            // Update cursor position visually
             update_cursor();
         }
     } else if (ascii == UP_ARROW) {
