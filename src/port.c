@@ -1,9 +1,4 @@
-/**
- * Author: turrnut
- * Copyright © turrnut under the GNU General Public License Version 3
- *
- * port.c
- */
+// port.c
 
 #include "port.h"
 
