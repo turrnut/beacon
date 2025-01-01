@@ -66,6 +66,8 @@ void process_command(const char* command) {
         update_cursor();
     } else if(my_strcmp(command, "clear") == 0){
         clear_screen();
+        row = 0;
+        println("");
         curs_row = 0;
         move_cursor_back();
         update_cursor();
