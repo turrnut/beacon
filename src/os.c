@@ -64,12 +64,19 @@ void process_command(const char* command) {
             curs_row = NUM_ROWS - 1;
         }
         update_cursor();
+    } else if(my_strcmp(command, "clear") == 0){
+        clear_screen();
+        curs_row = 0;
+        move_cursor_back();
+        update_cursor();
     } else {
         // Move the cursor back to the beginning of the line
         move_cursor_back();
 
         // Print the unknown command message on the same line
-        println("Unknown command.");
+        print("\"");
+        print(command);
+        println("\" is not a known command or executable program.");
         curs_row++;
         if (curs_row >= NUM_ROWS) {
             scroll_screen();
