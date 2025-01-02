@@ -47,5 +47,6 @@ void set_color(uint8_t fg, uint8_t bg);
 void move_cursor_left();
 void move_cursor_right();
 
+void int_to_string(int number, char *str);
 
 #endif

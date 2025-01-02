@@ -119,3 +119,36 @@ void move_cursor_left()
         buffer[col + NUM_COLS * row].character = ' ';  // Clear the character in that position
     }
 }
+
+
+void int_to_string(int number, char *str) {
+    int is_negative = 0;
+    int i = 0;
+
+    // Handle negative numbers
+    if (number < 0) {
+        is_negative = 1;
+        number = -number; // Make it positive for easier processing
+    }
+
+    // Extract digits and store them in reverse order
+    do {
+        str[i++] = (number % 10) + '0'; // Convert digit to character
+        number /= 10;
+    } while (number > 0);
+
+    // Add negative sign if needed
+    if (is_negative) {
+        str[i++] = '-';
+    }
+
+    // Null-terminate the string
+    str[i] = '\0';
+
+    // Reverse the string to get the correct order
+    for (int j = 0, k = i - 1; j < k; ++j, --k) {
+        char temp = str[j];
+        str[j] = str[k];
+        str[k] = temp;
+    }
+}

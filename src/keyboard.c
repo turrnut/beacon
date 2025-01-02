@@ -20,6 +20,7 @@
 
 char input_buffer[INPUT_BUFFER_SIZE];
 size_t input_len = 0;
+int shift = -1;
 
 volatile uint8_t key_buffer[KEY_BUFFER_SIZE];
 volatile size_t buffer_head = 0;
@@ -70,12 +71,28 @@ char scancode_to_ascii(uint8_t scancode) {
     if (scancode == 0x50) return DOWN_ARROW;   // Down arrow
     if (scancode == 0x4B) return LEFT_ARROW;   // Left arrow
     if (scancode == 0x4D) return RIGHT_ARROW;  // Right arrow
+    if (scancode == 0x2A) {
+        shift = -shift;
+    }
 
     if (scancode < 128) {
         return scancode_map[scancode];
     }
     return 0; // Invalid scancode
 }
+
+char capitalize_if_shift(char scncode) {
+    // Check if the scancode represents a lowercase letter
+    if (scncode >= 'a' && scncode <= 'z') {
+        if (shift == 1) {
+            // Convert to uppercase if Shift is active
+            return scncode - ('a' - 'A');
+        }
+    }
+    // If not a lowercase letter or Shift is -1, return the original scancode
+    return scncode;
+}
+
 
 void handle_keypress(uint8_t scancode) {
     if (scancode & 0x80) { // key release
@@ -88,7 +105,7 @@ void handle_keypress(uint8_t scancode) {
     }
     key_states[scancode] = 1; // mark as pressed
 
-    char ascii = scancode_to_ascii(scancode);
+    char ascii = capitalize_if_shift(scancode_to_ascii(scancode));
     if (!ascii) return; // ignore invalid scancodes
 
     if (ascii == '\b') { // Handle backspace

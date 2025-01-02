@@ -30,4 +30,7 @@ int buffer_get(uint8_t* scancode);
 char scancode_to_ascii(uint8_t scancode);
 void handle_keypress(uint8_t scancode);
 
+// Other functions
+char capitalize_if_shift(char scncode);
+
 #endif // KEYBOARD_H
