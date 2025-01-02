@@ -2,7 +2,7 @@
 # Under the GPL v3 License
 # See COPYING for information on how you can use this file
 #
-# boot.asm
+# keyboard.asm
 #
 .section .data
 scancode_to_char:
