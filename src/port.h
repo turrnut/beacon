@@ -51,7 +51,7 @@ void initPort32Bit(Port32Bit* port, uint16_t port_number);
 void writePort32Bit(Port32Bit* port, uint32_t data);
 uint32_t readPort32Bit(Port32Bit* port);
 
-
-
+uint8_t inb(uint16_t port);
+void outb(uint16_t port, uint8_t value);
 
 #endif

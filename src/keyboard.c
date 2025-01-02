@@ -10,6 +10,7 @@
 #include "os.h"
 #include "screen.h"
 #include "console.h"
+#include "string.h"
 
 #define UP_ARROW    -1
 #define DOWN_ARROW  -2
@@ -57,7 +58,7 @@ int buffer_get(uint8_t* scancode) {
 
 char scancode_to_ascii(uint8_t scancode) {
     static const uint8_t scancode_map[128] = {
-        0,  0, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\b',
+        0,  '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\b',
         0, 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\n', 0,
         'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', '`', 0, '\\',
         'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 0, '*', 0, ' ', 0,
