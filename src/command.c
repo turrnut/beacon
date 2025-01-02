@@ -12,6 +12,7 @@
 #include "os.h"          // For delay_ms and reboot functions
 #include "stdtypes.h"
 #include "string.h"
+#include <stdint.h>
 
 // External variables from os.c or other modules
 extern size_t curs_row;
@@ -58,6 +59,16 @@ int parse_command(const char* command, char* cmd, char args[MAX_ARGS][INPUT_BUFF
 }
 
 /**
+ * Shuts down the system using ACPI.
+ */
+void shutdown() {
+    asm volatile ("cli"); // Disable interrupts
+    while (inb(0x64) & 0x02); // Wait until the keyboard controller is ready
+    outb(0x64, 0xFE); // Send the ACPI shutdown command (0xFE is used for reset, 0x2002 for ACPI)
+    asm volatile ("hlt"); // Halt the CPU if shutdown fails
+}
+
+/**
  * Processes the entered command.
  */
 void process_command(const char* command) {
@@ -78,7 +89,7 @@ void process_command(const char* command) {
             if (strcmp(args[0], "argument") == 0) {
                 println("You passed the magic argument 'argument'. Congrats, I guess.");
             } else {
-                println("Unrecognized argument. Try harder, idiot.");
+                println("Unrecognized argument. Try harder.");
             }
         } else {
             println("This is a test command, but you didn't even give me any arguments. Nice one.");
@@ -102,6 +113,10 @@ void process_command(const char* command) {
         println("Rebooting the system...");
         delay_ms(1000); // Add a short delay for the message to be seen
         reboot();
+    } else if (strcmp(cmd, "shutdown") == 0) {
+        println("Shutting down the system...");
+        delay_ms(1000); // Add a short delay for the message to be seen
+        shutdown();
     }
     else if (strcmp(cmd, "") == 0) {
         move_cursor_back();

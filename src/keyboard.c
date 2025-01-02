@@ -11,6 +11,7 @@
 #include "screen.h"
 #include "console.h"
 #include "string.h"
+#include "command.h"
 
 #define UP_ARROW    -1
 #define DOWN_ARROW  -2

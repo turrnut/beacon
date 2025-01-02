@@ -18,6 +18,8 @@
 
 // Function Declarations
 
+void shutdown();
+
 /**
  * Parses the input command into the base command and its arguments.
  * 
