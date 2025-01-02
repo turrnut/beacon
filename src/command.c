@@ -100,8 +100,13 @@ void process_command(const char* command) {
             curs_row = NUM_ROWS - 1;
         }
         update_cursor();
-    }
-    else if (strcmp(cmd, "clear") == 0) {
+    } else if (strcmp(cmd, "echo") == 0) {
+        for (int i = 0; i < arg_count; i++) {
+            print(args[i]);
+            print(" ");
+        }
+        curs_row ++;
+    } else if (strcmp(cmd, "clear") == 0) {
         clear_screen();
         curs_row = 0;
         row = 0;
