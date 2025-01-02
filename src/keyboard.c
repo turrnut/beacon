@@ -82,11 +82,27 @@ char scancode_to_ascii(uint8_t scancode) {
 }
 
 char capitalize_if_shift(char scncode) {
+    // Convert to uppercase if Shift is active
+    if (shift == 1) {
     // Check if the scancode represents a lowercase letter
-    if (scncode >= 'a' && scncode <= 'z') {
-        if (shift == 1) {
-            // Convert to uppercase if Shift is active
+        if (scncode >= 'a' && scncode <= 'z') {
             return scncode - ('a' - 'A');
+            
+        } else {
+            // other
+            switch (scncode) {
+                case ';': return ':';
+                case '\'': return '\"';
+                case '/': return '?';
+                case '\\': return '|';
+                case ',': return '<';
+                case '.': return '>';
+                case '[': return '{';
+                case ']': return '}';
+                case '=': return '+';
+                case '-': return '_';
+                case '`': return '~';
+            }
         }
     }
     // If not a lowercase letter or Shift is -1, return the original scancode
