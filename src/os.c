@@ -65,7 +65,7 @@ void start() {
 
     enable_cursor(0, 15); // Enable the cursor
 
-    println("Welcome to Beacon Operating System!");
+    println("The Beacon Operating System.");
     println("Copyright (c) 2025 Turrnut Open Source Organization.");
     println("Type a command:");
 

@@ -68,6 +68,15 @@ void shutdown() {
     asm volatile ("hlt"); // Halt the CPU if shutdown fails
 }
 
+static void newRowAfterCommand(){
+    curs_row++;
+    if (curs_row >= NUM_ROWS) {
+        scroll_screen();
+        curs_row = NUM_ROWS - 1;
+    }
+    update_cursor();
+}
+
 /**
  * Processes the entered command.
  */
@@ -94,18 +103,12 @@ void process_command(const char* command) {
         } else {
             println("This is a test command, but you didn't even give me any arguments. Nice one.");
         }
-        curs_row++;
-        if (curs_row >= NUM_ROWS) {
-            scroll_screen();
-            curs_row = NUM_ROWS - 1;
-        }
-        update_cursor();
     } else if (strcmp(cmd, "echo") == 0) {
         for (int i = 0; i < arg_count; i++) {
             print(args[i]);
             print(" ");
         }
-        curs_row ++;
+        println("");
     } else if (strcmp(cmd, "clear") == 0) {
         clear_screen();
         curs_row = 0;
@@ -132,11 +135,7 @@ void process_command(const char* command) {
         print("\"");
         print(cmd);
         println("\" is not a known command or executable program.");
-        curs_row++;
-        if (curs_row >= NUM_ROWS) {
-            scroll_screen();
-            curs_row = NUM_ROWS - 1;
-        }
-        update_cursor();
+
     }
+    newRowAfterCommand();
 }
